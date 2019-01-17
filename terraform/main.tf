@@ -10,14 +10,14 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   bucket = "${aws_s3_bucket.lambda_trigger_bucket.id}"
 
   lambda_function {
-    lambda_function_arn = "${aws_lambda_function.test_lambda.arn}"
+    lambda_function_arn = "${aws_lambda_function.lambda_function.arn}"
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "${var.filterprefix != "" ? var.filterprefix : "" }"
     filter_suffix       = "${var.filtersuffix != "" ? var.filtersuffix : "" } "
   }
 }
 
-resource "aws_lambda_function" "test_lambda" {
+resource "aws_lambda_function" "lambda_function" {
   filename         = "${var.lambda_source_package}"
   function_name    = "tf-${var.owner}-${var.app_name}-${var.region}-lambda"
   role             = "${aws_iam_role.lambda_role.arn}"
@@ -34,10 +34,10 @@ resource "aws_lambda_function" "test_lambda" {
   }
 }
 
-resource "aws_lambda_permission" "allow_s3_ bucket" {
+resource "aws_lambda_permission" "allow_s3_bucket" {
   statement_id  = "AllowExecutionFromS3Bucket"
   action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.test_lambda.arn}"
+  function_name = "${aws_lambda_function.lambda_function.arn}"
   principal     = "s3.amazonaws.com"
   source_arn    = "${aws_s3_bucket.lambda_trigger_bucket.arn}"
 }
