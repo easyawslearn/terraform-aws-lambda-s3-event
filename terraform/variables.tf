@@ -19,7 +19,6 @@ variable "lambda_memory_size" {
   default = "512"
 }
 
-
 variable "filtersuffix" {
   default = ".SUFFIX"
 }
