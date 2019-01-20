@@ -36,5 +36,5 @@ variable "lambda_handler" {
 }
 
 variable "lambda_source_package" {
-  default = "./lambda_function.py.zip"
+  default = "terraform-lambda/lambda_function.py.zip"
 }
