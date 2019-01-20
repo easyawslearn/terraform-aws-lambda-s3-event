@@ -44,8 +44,6 @@ variable "is_s3_bucket_create" {
   default     = ""
 }
 
-count = "${var.is_s3_bucket_create == "" ? 1 : 0}"
-
 variable "s3_bucket_source_arn" {
   description = "The S3 bucket arn if the bucket already existing,keep blacn if you want to create new."
   default     = ""
