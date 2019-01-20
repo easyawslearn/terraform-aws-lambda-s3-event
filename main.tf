@@ -3,10 +3,12 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "lambda_trigger_bucket" {
+  count  = "${var.is_s3_bucket_create == "" ? 1 : 0}"
   bucket = "tf-${var.app_name}-lambda-invoke-${var.region}-bucket"
 }
 
 resource "aws_s3_bucket_notification" "bucket_notification" {
+  count  = "${var.is_s3_bucket_create == "" ? 1 : 0}"
   bucket = "${aws_s3_bucket.lambda_trigger_bucket.id}"
 
   lambda_function {
@@ -39,5 +41,5 @@ resource "aws_lambda_permission" "allow_s3_bucket" {
   action        = "lambda:InvokeFunction"
   function_name = "${aws_lambda_function.lambda_function.arn}"
   principal     = "s3.amazonaws.com"
-  source_arn    = "${aws_s3_bucket.lambda_trigger_bucket.arn}"
+  source_arn    = "${var.s3_bucket_source_arn == "" ? aws_s3_bucket.lambda_trigger_bucket.arn : var.s3_bucket_source_arn }"
 }
